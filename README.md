@@ -1,4 +1,4 @@
-# Kali Cloud Slim
+# Kali Build Slim
 
 A **minimal, macOS-friendly, Apple Silicon–native Kali Linux container** designed for penetration testers, cloud security engineers, and red teamers who want:
 
