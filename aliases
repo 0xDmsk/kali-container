@@ -3,6 +3,9 @@
 # ------------------------------
 export W_SECLISTS="/usr/share/seclists"
 
+# Disable AWS CLI pager (less is not installed in the image)
+export AWS_PAGER=""
+
 export W_DANGEROUS_FILES_4K="${W_SECLISTS}/Fuzzing/fuzz-Bo0oM.txt"
 export W_COMMON_WEB_FILES_4K="${W_SECLISTS}/Discovery/Web-Content/common.txt"
 export W_BURP_PARAMETERS_2K="${W_SECLISTS}/Discovery/Web-Content/burp-parameter-names.txt"

@@ -3,6 +3,10 @@ FROM --platform=linux/arm64 kalilinux/kali-rolling
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
 
+# pipx: install to a system-wide location so tools are on PATH for all users
+ENV PIPX_HOME=/opt/pipx
+ENV PIPX_BIN_DIR=/usr/local/bin
+
 # Disable docs, manpages, locales
 RUN printf "path-exclude /usr/share/doc/*\n\
 path-exclude /usr/share/man/*\n\
@@ -22,7 +26,6 @@ RUN apt update && \
     gobuster \
     sqlmap \
     dnsutils \
-    python3-impacket \
     netcat-traditional \
     socat \
     tmux \
@@ -33,6 +36,30 @@ RUN apt update && \
     lsb-release && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
+
+# -------- Extra pentest & Python tooling --------
+
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    golang \
+    pipx \
+    iputils-ping \
+    proxychains4 \
+    php-cli && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    pipx install impacket
+
+# uv (ARM64)
+RUN pipx install uv
+
+# Golang config — ENV persists across all subsequent layers, export in RUN does not
+ENV GOROOT=/usr/lib/go
+ENV GOPATH=/root/go
+ENV PATH=$PATH:/root/go/bin:/usr/lib/go/bin:/root/.pdtm/go/bin
+
+# pdtm
+RUN go install github.com/projectdiscovery/pdtm/cmd/pdtm@latest
 
 # -------- Cloud & K8s tooling (kept minimal) --------
 
